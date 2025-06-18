@@ -25,9 +25,13 @@ void playGame() {
     cout << "   H - Hard   (1 to 60)\n";
     cout << "Enter your choice: ";
     cin >> level;
-
-    target = getTargetByLevel(level);
-
+    if(level == 'E' || level == 'e' ||level == 'M' || level == 'm'|| level == 'H' || level == 'h'){
+        target = getTargetByLevel(level);
+    }else{
+        cout<<"Error! Enter Valid Difficulty Level";
+        return ;
+    }
+    
     cout << "\nI've selected a number for you to guess.\n";
     cout << "You have " << maxAttempts << " attempts. Enter 0 to quit anytime.\n\n";
 
