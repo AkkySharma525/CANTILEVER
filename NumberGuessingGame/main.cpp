@@ -31,7 +31,14 @@ void playGame() {
         cout<<"Error! Enter Valid Difficulty Level";
         return ;
     }
-    
+    char hintChoice;
+    cout << "💡 Press 'T' if you want a hint before you start guessing else N: ";
+    cin >> hintChoice;
+    if (hintChoice == 'T' || hintChoice == 't') {
+        cout << "\n🧠 _Hint_: “Try guessing somewhere in the middle... then narrow it down like a pro.”\n";
+        cout << "   (It's like cutting the range in half — over and over 😉)\n\n";
+    }
+
     cout << "\nI've selected a number for you to guess.\n";
     cout << "You have " << maxAttempts << " attempts. Enter 0 to quit anytime.\n\n";
 
