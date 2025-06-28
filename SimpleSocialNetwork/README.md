@@ -1,17 +1,21 @@
 # 👥 Simple Social Network (C++ Console App)
 
-This is a console-based simulation of a basic **Social Networking System**, built using **C++**, featuring profile creation, friend management, and message posting. Developed as part of the **Cantilever C++ Internship Project**.
+This is a console-based simulation of a basic **Social Networking System**, built using **C++**, featuring profile creation, friend management, message posting, and account management. Developed as part of the **Cantilever C++ Internship Project**.
 
 ---
 
 ## 📌 Features Implemented
 
 - ✅ **Create Profile** (name, username, age, bio)
-- ✅ **View Profile** by searching `users.txt`
+- ✅ **View Profile** by username
+- ✅ **View All Profiles** in the system
 - ✅ **Add Friend** (stored in `friends_<username>.txt`)
-- ✅ **View Friend List** from the user's friend file
+- ✅ **View Friend List**
+- ✅ **Remove a Friend**
 - ✅ **Post a Message** (stored in `posts_<username>.txt`)
-- ✅ **View Posts** by reading user's message file
+- ✅ **View Your Posts**
+- ✅ **Delete Posts**
+- ✅ **Delete Account** (removes profile, posts, and friends)
 - ✅ **Console UI** with menu-driven interface
 
 ---
@@ -27,10 +31,8 @@ This is a console-based simulation of a basic **Social Networking System**, buil
 
 ## 🎮 How to Run the App
 
-### 💻 Windows / Linux / Mac
+### 💻 On Windows / Linux / Mac
 
-    **Compile the code**
+    **Compile the code**  
     ```bash
     g++ main.cpp -o social
-
----
