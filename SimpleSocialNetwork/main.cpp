@@ -1,30 +1,35 @@
 /*
-    SIMPLE SOCIAL NETWORK PROJECT - INTERNSHIP TASK
-    -----------------------------------------------
-    Project Type: Console-Based Application
-    Language     : C++
-    Technologies : File I/O, Classes, STL (vector, map), Basic Menus
+  SIMPLE SOCIAL NETWORK PROJECT - INTERNSHIP TASK
+  -----------------------------------------------
+  Project Type: Console-Based Application
+  Language     : C++
+  Technologies : File I/O, Classes, STL (vector, map), Basic Menus
 
-    PROJECT PLAN (Step-by-Step Development)
+  PROJECT PLAN (Step-by-Step Development)
 
-    Step 1: Project Setup and Main Menu
-    Step 2: Create User Profile
-    Step 3: View Profile
-    Step 4: Add Friend
-    Step 5: View Friend List
-    Step 6: Post a Message
-    Step 7: View My Posts
+  Step 1: Project Setup and Main Menu
+  Step 2: Create User Profile
+  Step 3: View Profile
+  Step 4: Add Friend
+  Step 5: View Friend List
+  Step 6: Post a Message
+  Step 7: View My Posts
+  Step 8: Delete Account
+  Step 9: Delete My Posts
+  Step 10: Remove Friend
 
+  Author: Akshit Sharma
 */
 
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
+#include <cstdio>  // For remove()
 
 using namespace std;
 
-// Create a new user profile and store in users.txt
+// Create a new user profile
 void createProfile() {
     string name, username, bio;
     int age;
@@ -129,7 +134,7 @@ void viewFriendList() {
     }
 }
 
-// Allow user to post a message
+// Post a message to posts_<username>.txt
 void postMessage() {
     string username, message;
     cout << "\n--- Post a Message ---\n";
@@ -168,19 +173,137 @@ void viewPosts() {
     }
 }
 
-// Display main menu
+// Delete a user account from users.txt and remove their files
+void deleteAccount() {
+    string username, line;
+    cout << "\n--- Delete Account ---\n";
+    cout << "Enter your username: ";
+    cin >> username;
+
+    ifstream inFile("users.txt");
+    ofstream tempFile("temp.txt");
+    bool found = false;
+
+    while (getline(inFile, line)) {
+        if (line.find(username + ",") != 0) {
+            tempFile << line << "\n";
+        } else {
+            found = true;
+        }
+    }
+
+    inFile.close();
+    tempFile.close();
+    remove("users.txt");
+    rename("temp.txt", "users.txt");
+
+    if (found) {
+        remove(("friends_" + username + ".txt").c_str());
+        remove(("posts_" + username + ".txt").c_str());
+        cout << "✅ Account deleted successfully along with posts and friends.\n";
+    } else {
+        cout << "❌ Account not found.\n";
+    }
+}
+
+// View all saved profiles from users.txt
+void viewAllProfiles() {
+    ifstream inFile("users.txt");
+    string line;
+    int count = 0;
+
+    cout << "\n--- All User Profiles ---\n";
+
+    while (getline(inFile, line)) {
+        string u, n, b;
+        int a;
+        size_t pos1 = line.find(",");
+        size_t pos2 = line.find(",", pos1 + 1);
+        size_t pos3 = line.find(",", pos2 + 1);
+
+        u = line.substr(0, pos1);
+        n = line.substr(pos1 + 1, pos2 - pos1 - 1);
+        a = stoi(line.substr(pos2 + 1, pos3 - pos2 - 1));
+        b = line.substr(pos3 + 1);
+
+        cout << "\n👤 Username : " << u;
+        cout << "\n📛 Name     : " << n;
+        cout << "\n🎂 Age      : " << a;
+        cout << "\n📝 Bio      : " << b;
+        cout << "\n--------------------------\n";
+        count++;
+    }
+
+    if (count == 0) {
+        cout << "❌ No profiles found.\n";
+    }
+}
+
+
+// Delete all posts of a user
+void deletePosts() {
+    string username;
+    cout << "\n--- Delete My Posts ---\n";
+    cout << "Enter your username: ";
+    cin >> username;
+
+    if (remove(("posts_" + username + ".txt").c_str()) == 0) {
+        cout << "✅ All posts deleted successfully.\n";
+    } else {
+        cout << "❌ No posts found to delete.\n";
+    }
+}
+
+// Remove a specific friend from friend list
+void removeFriend() {
+    string username, friendToRemove, line;
+    cout << "\n--- Remove Friend ---\n";
+    cout << "Enter your username: ";
+    cin >> username;
+    cout << "Enter the friend's username to remove: ";
+    cin >> friendToRemove;
+
+    ifstream inFile("friends_" + username + ".txt");
+    ofstream tempFile("temp.txt");
+    bool found = false;
+
+    while (getline(inFile, line)) {
+        if (line != friendToRemove) {
+            tempFile << line << "\n";
+        } else {
+            found = true;
+        }
+    }
+
+    inFile.close();
+    tempFile.close();
+    remove(("friends_" + username + ".txt").c_str());
+    rename("temp.txt", ("friends_" + username + ".txt").c_str());
+
+    if (found) {
+        cout << "✅ Friend removed successfully.\n";
+    } else {
+        cout << "❌ Friend not found in your list.\n";
+    }
+}
+
+// Show the main menu
 void showMenu() {
-    cout << "\n==============================" << endl;
-    cout << "  SIMPLE SOCIAL NETWORK (C++) " << endl;
-    cout << "==============================" << endl;
-    cout << "1. Create Profile" << endl;
-    cout << "2. View Profile" << endl;
-    cout << "3. Add Friend" << endl;
-    cout << "4. View Friend List" << endl;
-    cout << "5. Post a Message" << endl;
-    cout << "6. View My Posts" << endl;
-    cout << "7. Exit" << endl;
-    cout << "==============================" << endl;
+    cout << "\n==============================\n";
+    cout << "  SIMPLE SOCIAL NETWORK (C++) \n";
+    cout << "==============================\n";
+    cout << "1. Create Profile\n";
+    cout << "2. View Profile\n";
+    cout << "3. Add Friend\n";
+    cout << "4. View Friend List\n";
+    cout << "5. Post a Message\n";
+    cout << "6. View My Posts\n";
+    cout << "7. Delete Account\n";
+    cout << "8. Delete My Posts\n";
+    cout << "9. Remove a Friend\n";
+    cout << "10. View All Profiles\n";
+    cout << "11. Exit\n";
+    cout << "==============================\n";
 }
 
 int main() {
@@ -188,7 +311,7 @@ int main() {
 
     do {
         showMenu();
-        cout << "Enter your choice (1-7): ";
+        cout << "Enter your choice (1-10): ";
         cin >> choice;
 
         switch (choice) {
@@ -198,11 +321,15 @@ int main() {
             case 4: viewFriendList(); break;
             case 5: postMessage(); break;
             case 6: viewPosts(); break;
-            case 7: cout << "👋 Exiting program. Goodbye!\n"; break;
+            case 7: deleteAccount(); break;
+            case 8: deletePosts(); break;
+            case 9: removeFriend(); break;
+            case 10: viewAllProfiles(); break;
+            case 11: cout << "👋 Exiting program. Goodbye!\n"; break;
             default: cout << "❌ Invalid choice. Try again.\n";
         }
 
-    } while (choice != 7);
+    } while (choice != 10);
 
     return 0;
 }
